@@ -1,0 +1,49 @@
+{
+  "name": "apollo-client-reduxify",
+  "version": "1.0.0",
+  "description": "A redux-like implementation of @apollo/client's reactive state management solution with advanced features.",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "scripts": {
+    "test": "jest --config jestconfig.json",
+    "build": "tsc",
+    "lint": "tslint -p tsconfig.json",
+    "prepare": "npm run build",
+    "prepublishOnly": "npm run lint",
+    "preversion": "npm run lint",
+    "version": "npm run format && git add -A src",
+    "postversion": "git push && git push --tags"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jovenlumaas/apollo-client-reduxify.git"
+  },
+  "keywords": [
+    "apollo-client",
+    "reactive-variables",
+    "state-management",
+    "redux",
+    "react"
+  ],
+  "author": "JOL",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jovenlumaas/react-redux-methods/issues"
+  },
+  "homepage": "https://github.com/jovenlumaas/react-redux-methods#readme",
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "jest": "^27.0.4",
+    "prettier": "^2.3.1",
+    "ts-jest": "^27.0.3",
+    "tslint": "^6.1.3",
+    "tslint-config-prettier": "^1.18.0",
+    "typescript": "^4.3.2"
+  },
+  "files": [
+    "lib/**/*"
+  ],
+  "dependencies": {
+    "@apollo/client": "^3.3.15"
+  }
+}
