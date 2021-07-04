@@ -1,3 +1,5 @@
+import React from 'react';
+
 type MapStateCallback<S> = (allSelectors: S, ownProps?: any) => any;
 type MapDispatchCallback<A> = (actions: A) => any;
 type MapSelectorReturnType<T> = {
@@ -5,9 +7,9 @@ type MapSelectorReturnType<T> = {
 };
 
 type InferableComponentWithProps<TInjectedProps = any, TNeedsProps = any> = <
-  C extends React.ComponentType<TInjectedProps & TNeedsProps>
+  C extends React.ComponentType<TInjectedProps & TNeedsProps>,
 >(
-  component: C
+  component: C,
 ) => (props: TNeedsProps) => JSX.Element;
 
 interface IReactiveVarConnectorFn<S, A> {
@@ -18,31 +20,26 @@ interface IReactiveVarConnectorFn<S, A> {
    */
   <MS extends MapStateCallback<S>, MD extends MapDispatchCallback<A>>(
     mapState: MS,
-    mapDispatch: MD
-  ): InferableComponentWithProps<
-    MapSelectorReturnType<ReturnType<MS>> & ReturnType<MD>,
-    any
-  >;
+    mapDispatch: MD,
+  ): InferableComponentWithProps<MapSelectorReturnType<ReturnType<MS>> & ReturnType<MD>, any>;
 
   /**
    * ReactiveVarConnector 'mapState' overload.
    *
    * This overload maps the selected state to the react component with typescript intellisense.
    */
-  <MS extends MapStateCallback<S>>(
-    mapState: MS,
-    mapDispatch?: null | undefined
-  ): InferableComponentWithProps<MapSelectorReturnType<ReturnType<MS>>>;
+  <MS extends MapStateCallback<S>>(mapState: MS, mapDispatch?: null | undefined): InferableComponentWithProps<
+    MapSelectorReturnType<ReturnType<MS>>
+  >;
 
   /**
    * ReactiveVarConnector 'mapDispatch' overload.
    *
    * This overload maps the selected action to the react component with typescript intellisense.
    */
-  <MD extends MapDispatchCallback<A>>(
-    mapState: null | undefined,
-    mapDispatch: MD
-  ): InferableComponentWithProps<ReturnType<MD>>;
+  <MD extends MapDispatchCallback<A>>(mapState: null | undefined, mapDispatch: MD): InferableComponentWithProps<
+    ReturnType<MD>
+  >;
 }
 
 const handleMapState = ({
@@ -61,10 +58,7 @@ const handleMapState = ({
       const mapStateInstance = mappedState[key];
       return {
         ...acc,
-        [key]:
-          typeof mapStateInstance === "function"
-            ? mapStateInstance()
-            : mapStateInstance,
+        [key]: typeof mapStateInstance === 'function' ? mapStateInstance() : mapStateInstance,
       };
     }, {});
   } else {
@@ -72,13 +66,7 @@ const handleMapState = ({
   }
 };
 
-const handleMapDispatch = ({
-  mapDispatch,
-  actions,
-}: {
-  mapDispatch?: Function | null;
-  actions: any;
-}) => {
+const handleMapDispatch = ({ mapDispatch, actions }: { mapDispatch?: Function | null; actions: any }) => {
   if (mapDispatch) {
     return mapDispatch(actions);
   } else {
@@ -99,11 +87,10 @@ export const createReactiveVarConnector =
       />
     );
 
-export type ConnectedProps<TConnector> =
-  TConnector extends InferableComponentWithProps<infer TInjectedProps, any>
-    ? unknown extends TInjectedProps
-      ? TConnector extends InferableComponentWithProps<infer TInjectedProps>
-        ? TInjectedProps
-        : never
-      : TInjectedProps
-    : never;
+export type ConnectedProps<TConnector> = TConnector extends InferableComponentWithProps<infer TInjectedProps, any>
+  ? unknown extends TInjectedProps
+    ? TConnector extends InferableComponentWithProps<infer TInjectedProps>
+      ? TInjectedProps
+      : never
+    : TInjectedProps
+  : never;
