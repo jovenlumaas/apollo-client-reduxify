@@ -33,7 +33,7 @@ package.
 - apollo-client-reduxify provides strongly typed utility functions for
   dispatching an action and consuming a state (via selectors).
 
-- in apollo-client-reduxify, a developer has the flexibility to persist a state
+- in apollo-client-reduxify, the developer has the flexibility to persist a state
   tree and keep the other state trees not to persist. Unlike in redux, you have to
   persist the whole large state tree, if needed.
 
