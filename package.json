@@ -1,6 +1,6 @@
 {
   "name": "apollo-client-reduxify",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "A redux-like implementation of @apollo/client's reactive state management solution with advanced features.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",

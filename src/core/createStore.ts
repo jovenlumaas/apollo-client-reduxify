@@ -37,7 +37,7 @@ export const createReactiveVarStore: TCreateStoreFn = (
   const allReducers = Object.keys(reducers).reduce(
     (acc, key) => ({
       ...acc,
-      [key]: reducers[key]({ reactiveVars: { ...reactiveVars }, enableLog, context }),
+      [key]: reducers[key]({ reactiveVars: Object.assign({}, { ...reactiveVars }), enableLog, context }),
     }),
     {} as any,
   );
