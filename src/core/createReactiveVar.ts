@@ -1,11 +1,7 @@
-import { gql, makeVar, useQuery } from "@apollo/client";
-import { saveToStorage, loadFromStorage, makeActionLog } from "../utils";
+import { gql, makeVar, useQuery } from '@apollo/client';
+import { saveToStorage, loadFromStorage, makeActionLog } from '../utils';
 // types
-import type {
-  TReactiveVarOptions,
-  TPersistTo,
-  TReactiveVarsMap,
-} from "../types";
+import type { TReactiveVarOptions, TPersistTo, TReactiveVarsMap } from '../types';
 
 type TReducerContextWithReactiveVars = {
   reactiveVars: TReactiveVarsMap;
@@ -18,18 +14,14 @@ type TDevOps = {
   context?: Record<string, any>;
 };
 
-type TReducerFn<S> = (
-  state: S,
-  payload: any,
-  context: TReducerContextWithReactiveVars
-) => S;
+type TReducerFn<S> = (state: S, payload: any, context: TReducerContextWithReactiveVars) => S;
 type TSelectorFn<S> = (state: S, args: any) => any;
 
 type TCreateReactiveVarFn = <
   N extends string,
   S,
   R extends Record<string, TReducerFn<S>>,
-  L extends Record<string, TSelectorFn<S>>
+  L extends Record<string, TSelectorFn<S>>,
 >(options: {
   name: N;
   initialState: S;
@@ -38,13 +30,7 @@ type TCreateReactiveVarFn = <
   persistTo?: TPersistTo;
 }) => TReactiveVarOptions<N, S, R, L>;
 
-export const createReactiveVar: TCreateReactiveVarFn = ({
-  name,
-  initialState,
-  reducers,
-  selectors,
-  persistTo,
-}) => {
+export const createReactiveVar: TCreateReactiveVarFn = ({ name, initialState, reducers, selectors, persistTo }) => {
   // define reactiveVar instance
   let loadedState = initialState;
 
@@ -64,17 +50,16 @@ export const createReactiveVar: TCreateReactiveVarFn = ({
       [key]:
         ({ reactiveVars, enableLog, context }: TDevOps) =>
         (payload: any) => {
-          // delete current reactiveVar key because
+          // exclude current reactiveVar key because
           // we don't want to self dispatch thru a case reducer
-          delete reactiveVars[name];
+          const { [name]: nameExcluded, ...otherReactiveVars } = reactiveVars;
 
           // get state
           const previousState = reactiveVar();
-          const updatedState = reducers[key as keyof typeof reducers](
-            previousState,
-            payload,
-            { reactiveVars, ...(context ?? {}) }
-          );
+          const updatedState = reducers[key as keyof typeof reducers](previousState, payload, {
+            reactiveVars: otherReactiveVars,
+            ...(context ?? {}),
+          });
 
           // update reactive variable
           reactiveVar(updatedState);
@@ -98,12 +83,7 @@ export const createReactiveVar: TCreateReactiveVarFn = ({
 
       // for hook selector
       variabledSelectors[key] = function useVar(args?: any) {
-        return caseSelector(
-          useQuery(gql`query reactiveVar_${name} {${name} @client}`)?.data?.[
-            name
-          ],
-          args
-        );
+        return caseSelector(useQuery(gql`query reactiveVar_${name} {${name} @client}`)?.data?.[name], args);
       };
 
       // for non-hook selector

@@ -13,16 +13,16 @@ package.
   using reactive variables.
 
 - redux is a single large state tree while apollo-client-reduxify state is
-  composed of many state trees by features. This allows react component to
-  RE-RENDER ONLY based on the affected state change.
+  composed of many state trees. This allows react component to RE-RENDER ONLY
+  based on the affected state change.
 
 - just like redux, apollo-client-reduxify implements reducers and selectors. But
   in apollo-client-reduxify, since it is composed of many state trees
   independently, each case reducer can access the other state trees via context
-  as third argument. This allows the reducer to futher evaluate your code logic
-  with ease of access to other state trees.
+  as third argument. This allows the developer to easily access the other state trees
+  to be used for a case reducer's code logic.
 
-- each case reducer can dispatch an action of other reducers since it can access
+- each case reducer can dispatch other reducer's action since it can access
   reactive variables thru context as third argument (be cautious of dispatching
   an action via reducer, this may create a circular dispatching actions).
 
@@ -30,14 +30,14 @@ package.
   implements a concise way of implementing a strongly typed reducers and
   selectors.
 
-- apollo-client-reduxify provides a strongly typed utility functions for
-  dispatching actions and consuming state.
+- apollo-client-reduxify provides strongly typed utility functions for
+  dispatching an action and consuming a state (via selectors).
 
-- in apollo-client-reduxify you have the flexibility to persist a state tree and
-  keep the other state trees not to persist. Unlike in redux, you have to
+- in apollo-client-reduxify, a developer has the flexibility to persist a state
+  tree and keep the other state trees not to persist. Unlike in redux, you have to
   persist the whole large state tree, if needed.
 
-- both has reactivity during a state change.
+- both have reactivity during a state change.
 
 - apollo-client-reduxify doesn't have middleware features YET.
 
