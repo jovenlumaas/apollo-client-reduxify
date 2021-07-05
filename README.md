@@ -1,12 +1,11 @@
 # apollo-client-reduxify
 
-A lightweight redux-like implementation of @apollo/client's reactive state
-management solution. If you're working a project both using apollo-client 3+ and
-redux, then you have a redundant state management. You may consider dropping
-redux and adopt the apollo-client's local state management solution using this
-package.
+A lightweight redux-like implementation of [apollo-client](https://www.npmjs.com/package/@apollo/client)'s
+reactive state management solution. If you're working a project using both apollo-client 3+ and
+redux, then definitely you have a redundant state management. You may consider dropping
+redux and adopt the apollo-client's local state management solution using this package.
 
-### apollo-client-reduxify does and doesn't have from redux
+### `apollo-client-reduxify does and doesn't have from redux`
 
 - redux is a state management solution while apollo-client-reduxify is a toolkit
   for a redux-like implementation of @apollo/client state management solution
@@ -27,19 +26,22 @@ package.
   an action via reducer, this may create a circular dispatching actions).
 
 - redux requires too much boilerplate code while apollo-client-reduxify
-  implements a concise way of implementing a strongly typed reducers and
-  selectors.
+  implements concise and strongly typed reducers and selectors syntax.
 
 - apollo-client-reduxify provides strongly typed utility functions for
   dispatching an action and consuming a state (via selectors).
 
-- in apollo-client-reduxify, the developer has the flexibility to persist a state
-  tree and keep the other state trees not to persist. Unlike in redux, you have to
+- in apollo-client-reduxify, the developer has the option to persist a state
+  tree and keeping the other state trees not to persist. Unlike in redux, you have to
   persist the whole large state tree, if needed.
 
 - both have reactivity during a state change.
 
 - apollo-client-reduxify doesn't have middleware features YET.
+
+- the cool thing about apollo-client-reduxify is that all of the created state trees are just
+  reactive variables, this means that the developer can still use reactive variables syntax
+  provided by apollo-client.
 
 ## Installation
 
@@ -137,15 +139,15 @@ const {
   dispatch, // use to dispatch an action
   useReadReactiveVar, // hook version for accessing a state
   readReactiveVar, // non-hook version for accessing a state
-  fieldTypes, // !IMPORTANT: this should be passed during creation of apollo's 'inMemoryCache'
-  reactiveVars, // the created reactive variables (in this case, 'notificationsVar' and 'modalsVar')
+  fieldTypes, // !IMPORTANT: this should be passed during creation of apollo client's 'InMemoryCache'
+  reactiveVars, // an object of the created reactive variables (in this case, 'notificationsVar' and 'modalsVar')
 } = createReactiveVarStore(rootVars, {
   // you can log the dispatched actions with flexibility.
   // If set to true, all the dispatched actions will be logged.
   // You can pass an array to select a partcular state to log.
   enableLog: false, // true or ["modalsVar", ...etc]
   context: {
-    // ... you can add an additional context here to access by all reducers
+    // ... you can add additional context here to access by all reducers
     // for a logic or running a function purposes
   },
 });
@@ -160,7 +162,7 @@ export { dispatch, useReadReactiveVar, readReactiveVar, fieldTypes, reactiveVars
 import { InMemoryCache, ApolloClient } from '@apollo/client';
 import { fieldTypes } from './reduxify';
 
-const cache: InMemoryCache = new InMemoryCache({
+const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
@@ -177,20 +179,19 @@ const client = new ApolloClient({
 });
 ```
 
-### `Consuming state and dispatching an action (for your react component)`
+### `Consuming a state and dispatching an action (for your react component)`
 
-There are flexible ways of accessing state and dispatching an action:
+There are flexible ways of accessing a state and dispatching an action:
 
-1. Creating a 'connect' function and wrap your react component (like
+1. Creating a 'connect' HOC and wrap your react component (like
    react-redux's mapStateToProps, mapDispatchToProps method)
 2. Use directly the dispatch, useReadReactiveVar, and readReactiveVar helper
    functions.
-3. via reactiveVars (see documentation
+3. via reactiveVars (see the documentation about
    ["Reactive variables"](https://www.apollographql.com/docs/react/local-state/reactive-variables)
    for more information).
 4. via useQuery together with your graphql query (see the documentation about
-   [Querying local state](https://www.apollographql.com/docs/react/v2/data/local-state/#querying-local-state)
-   for more information).
+   [Querying local state](https://www.apollographql.com/docs/react/local-state/managing-state-with-field-policies/#querying) for more information).
 
 #### OPTION 1. Creating a 'connect' function and wrap your react component
 
@@ -230,7 +231,7 @@ const App = ({ notification, setNotificationShow }) => {
   );
 };
 
-export default connector(App);
+export default connect(App);
 ```
 
 #### OPTION 2. Use directly the dispatch, useReadReactiveVar, and readReactiveVar helper functions
@@ -242,7 +243,7 @@ import { dispatch, readReactiveVar } from './reduxify';
 const toastNotificationShow = (message) => {
   // ....your code logic
 
-  // all of the parameters are also powered by typescript
+  // all of the parameters are strongly typed
   // the first parameter is the 'action' to dispatch and the other is the 'payload'
   dispatch('setNotificationShow', message);
 };
@@ -250,7 +251,8 @@ const toastNotificationShow = (message) => {
 const getNotification = () => {
   // ...your code logic
 
-  // the parameter is the 'selector' name which is also powered by typescript.
-  return readReactiveVar('getNotification'); // or useReadReactiveVar("getNotification") if inside react component
+  // the parameter is the 'selector' name which is strongly typed.
+  return readReactiveVar('getNotification');
+  // or useReadReactiveVar("getNotification") if inside react component
 };
 ```
