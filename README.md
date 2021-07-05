@@ -40,7 +40,7 @@ redux and adopt the apollo-client's local state management solution using this p
 - apollo-client-reduxify doesn't have middleware features YET.
 
 - the cool thing about apollo-client-reduxify is that all of the created state trees are just
-  ["reactive variables"](https://www.apollographql.com/docs/react/local-state/reactive-variables),
+  [reactive variables](https://www.apollographql.com/docs/react/local-state/reactive-variables),
   this means that the developer can still use reactive variables syntax provided by apollo-client.
 
 ## Installation
