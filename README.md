@@ -54,7 +54,7 @@ redux and adopt the apollo-client's local state management solution using this p
 ```js
 import { createReactiveVar } from 'apollo-client-reduxify';
 
-// for ./notifications.js
+// for './notifications.js'
 const initialState = {
   isOpen: false,
   message: '',
@@ -77,7 +77,7 @@ export const notificationsVar = createReactiveVar({
   },
 });
 
-// for ./modals.js
+// for './modals.js'
 const initialState = {
   isOpen: false,
   promptMessage: '',
@@ -113,7 +113,7 @@ export const modalsVar = createReactiveVar({
 ### `Combining Reactive Variable Instances`
 
 ```js
-// for ./rootVars
+// for './rootVars'
 
 import { mergeReactiveVars } from 'apollo-client-reduxify';
 
@@ -129,7 +129,7 @@ export default mergeReactiveVars({
 ### `Creating a store and accessing utility functions`
 
 ```js
-// for ./reduxify
+// for './reduxify'
 
 import { createReactiveVarStore } from 'apollo-client-reduxify';
 
@@ -193,12 +193,12 @@ There are flexible ways of accessing a state and dispatching an action:
 4. via useQuery together with your graphql query (see the documentation about
    [Querying local state](https://www.apollographql.com/docs/react/local-state/managing-state-with-field-policies/#querying) for more information).
 
-#### OPTION 1. Creating a 'connect' function and wrap your react component
+#### OPTION 1. Creating a 'connect' HOC and wrap your react component
 
 ```js
 import { createReactiveVarConnector } from 'apollo-client-reduxify';
 
-// back to './reduxify file, add this code:
+// back to './reduxify' file, add this code:
 
 const reactiveVarConnector = createReactiveVarConnector(selectors, actions);
 
@@ -212,7 +212,7 @@ export {
   reactiveVarConnector, // <--- newly added
 };
 
-// for './App
+// for './App'
 
 // 'reactiveVarConnector' function provides typescript intellisense like react-redux's 'connect' api.
 // This means that all of your pre-defined 'selectors' and 'actions' will be provided by typescript
@@ -236,7 +236,7 @@ export default connect(App);
 
 #### OPTION 2. Use directly the dispatch, useReadReactiveVar, and readReactiveVar helper functions
 
-```ts
+```js
 //
 import { dispatch, readReactiveVar } from './reduxify';
 
