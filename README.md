@@ -195,7 +195,7 @@ There are flexible ways of accessing a state and dispatching an action:
    ["Reactive variables"](https://www.apollographql.com/docs/react/local-state/reactive-variables)
    for more information).
 4. via useQuery together with your graphql query (see the documentation about
-   [Querying local state](https://www.apollographql.com/docs/react/local-state/managing-state-with-field-policies/#querying) for more information).
+   ["Querying local state"](https://www.apollographql.com/docs/react/local-state/managing-state-with-field-policies/#querying) for more information).
 
 #### OPTION 1. Creating a 'connect' HOC and wrap your react component
 
