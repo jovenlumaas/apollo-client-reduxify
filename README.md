@@ -25,6 +25,10 @@ redux and adopt the apollo-client's local state management solution using this p
   reactive variables thru context as third argument (be cautious of dispatching
   an action via reducer, this may create a circular dispatching actions).
 
+- apollo-client-reduxify provides a feature for watching the dispatched actions
+  and the state changes. The developer has the option to watch only a particular state tree
+  or all state trees.
+
 - redux requires too much boilerplate code while apollo-client-reduxify
   implements concise and strongly typed reducers and selectors syntax.
 
