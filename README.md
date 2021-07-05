@@ -8,7 +8,7 @@ redux and adopt the apollo-client's local state management solution using this p
 ### `apollo-client-reduxify does and doesn't have from redux`
 
 - redux is a state management solution while apollo-client-reduxify is a toolkit
-  for a redux-like implementation of @apollo/client state management solution
+  for a redux-like implementation of apollo-client's state management solution
   using reactive variables.
 
 - redux is a single large state tree while apollo-client-reduxify state is
@@ -40,8 +40,8 @@ redux and adopt the apollo-client's local state management solution using this p
 - apollo-client-reduxify doesn't have middleware features YET.
 
 - the cool thing about apollo-client-reduxify is that all of the created state trees are just
-  reactive variables, this means that the developer can still use reactive variables syntax
-  provided by apollo-client.
+  ["reactive variables"](https://www.apollographql.com/docs/react/local-state/reactive-variables),
+  this means that the developer can still use reactive variables syntax provided by apollo-client.
 
 ## Installation
 
