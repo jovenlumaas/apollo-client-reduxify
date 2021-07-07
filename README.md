@@ -306,3 +306,5 @@ const SampleComponent = () => {
   );
 };
 ```
+
+For typescript users, see [EXAMPLES](https://github.com/jovenlumaas/apollo-client-reduxify/tree/master/examples).
