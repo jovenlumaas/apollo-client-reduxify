@@ -9,7 +9,7 @@ If you're working on a project using both apollo-client 3+ and
 redundant state management. You may consider dropping redux (and react-redux, ...etc)
 and adopt the apollo-client's local state management solution using this package.
 
-## `Apollo's Reactive Variable API + Redux-like API = apollo-client-reduxify`
+### `Apollo's Reactive Variable API + Redux-like API = apollo-client-reduxify`
 
 apollo-client-reduxify does and doesn't have from redux:
 
@@ -307,4 +307,4 @@ const SampleComponent = () => {
 };
 ```
 
-For typescript users, see [EXAMPLES](https://github.com/jovenlumaas/apollo-client-reduxify/tree/master/examples).
+For typescript users, see [EXAMPLES](https://github.com/jovenlumaas/apollo-client-reduxify/tree/master/examples) here.
