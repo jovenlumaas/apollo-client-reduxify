@@ -1,4 +1,9 @@
-import React from 'react';
+import React from "react";
+import type {
+  TAllReducers,
+  TSelectors,
+  TInternalDispatchFn,
+} from "../../types";
 
 type MapStateCallback<S> = (allSelectors: S, ownProps?: any) => any;
 type MapDispatchCallback<A> = (actions: A) => any;
@@ -7,12 +12,12 @@ type MapSelectorReturnType<T> = {
 };
 
 type InferableComponentWithProps<TInjectedProps = any, TNeedsProps = any> = <
-  C extends React.ComponentType<TInjectedProps & TNeedsProps>,
+  C extends React.ComponentType<TInjectedProps & TNeedsProps>
 >(
-  component: C,
+  component: C
 ) => (props: TNeedsProps) => JSX.Element;
 
-interface IReactiveVarConnectorFn<S, A> {
+export interface IReactiveVarConnectorFn<S, A> {
   /**
    * ReactiveVarConnector 'mapState' and 'mapDispatch' overload.
    *
@@ -20,26 +25,31 @@ interface IReactiveVarConnectorFn<S, A> {
    */
   <MS extends MapStateCallback<S>, MD extends MapDispatchCallback<A>>(
     mapState: MS,
-    mapDispatch: MD,
-  ): InferableComponentWithProps<MapSelectorReturnType<ReturnType<MS>> & ReturnType<MD>, any>;
+    mapDispatch: MD
+  ): InferableComponentWithProps<
+    MapSelectorReturnType<ReturnType<MS>> & ReturnType<MD>,
+    any
+  >;
 
   /**
    * ReactiveVarConnector 'mapState' overload.
    *
    * This overload maps the selected state to the react component with typescript intellisense.
    */
-  <MS extends MapStateCallback<S>>(mapState: MS, mapDispatch?: null | undefined): InferableComponentWithProps<
-    MapSelectorReturnType<ReturnType<MS>>
-  >;
+  <MS extends MapStateCallback<S>>(
+    mapState: MS,
+    mapDispatch?: null | undefined
+  ): InferableComponentWithProps<MapSelectorReturnType<ReturnType<MS>>>;
 
   /**
    * ReactiveVarConnector 'mapDispatch' overload.
    *
    * This overload maps the selected action to the react component with typescript intellisense.
    */
-  <MD extends MapDispatchCallback<A>>(mapState: null | undefined, mapDispatch: MD): InferableComponentWithProps<
-    ReturnType<MD>
-  >;
+  <MD extends MapDispatchCallback<A>>(
+    mapState: null | undefined,
+    mapDispatch: MD
+  ): InferableComponentWithProps<ReturnType<MD>>;
 }
 
 const handleMapState = ({
@@ -48,7 +58,7 @@ const handleMapState = ({
   ownProps,
 }: {
   mapState?: Function | null;
-  selectors: any;
+  selectors: TSelectors<any>;
   ownProps: any;
 }) => {
   if (mapState) {
@@ -58,7 +68,10 @@ const handleMapState = ({
       const mapStateInstance = mappedState[key];
       return {
         ...acc,
-        [key]: typeof mapStateInstance === 'function' ? mapStateInstance() : mapStateInstance,
+        [key]:
+          typeof mapStateInstance === "function"
+            ? mapStateInstance()
+            : mapStateInstance,
       };
     }, {});
   } else {
@@ -66,31 +79,53 @@ const handleMapState = ({
   }
 };
 
-const handleMapDispatch = ({ mapDispatch, actions }: { mapDispatch?: Function | null; actions: any }) => {
+const handleMapDispatch = ({
+  mapDispatch,
+  allReducers,
+  dispatch,
+}: {
+  mapDispatch?: Function | null;
+  allReducers: TAllReducers;
+  dispatch: TInternalDispatchFn;
+}) => {
   if (mapDispatch) {
-    return mapDispatch(actions);
+    const selectedReducers = mapDispatch(allReducers);
+    return Object.keys(selectedReducers).reduce((acc, key) => {
+      return {
+        ...acc,
+        [key]: (payload: any) => {
+          dispatch([])(selectedReducers[key].type, payload);
+        },
+      };
+    }, {});
   } else {
     return {};
   }
 };
 
 export const createReactiveVarConnector =
-  <S, A>(selectors: S, actions: A): IReactiveVarConnectorFn<S, A> =>
+  <S extends TSelectors<any>, A extends TAllReducers>(
+    selectors: S,
+    allReducers: A,
+    dispatch: TInternalDispatchFn
+  ): IReactiveVarConnectorFn<S, A> =>
   (mapState: any, mapDispatch?: any) =>
   (WrappedComponent: any) =>
-  (ownProps: any) =>
-    (
+  (ownProps: any) => {
+    return (
       <WrappedComponent
         {...handleMapState({ mapState, selectors, ownProps })}
-        {...handleMapDispatch({ mapDispatch, actions })}
+        {...handleMapDispatch({ mapDispatch, allReducers, dispatch })}
         {...ownProps}
       />
     );
+  };
 
-export type ConnectedProps<TConnector> = TConnector extends InferableComponentWithProps<infer TInjectedProps, any>
-  ? unknown extends TInjectedProps
-    ? TConnector extends InferableComponentWithProps<infer TInjectedProps>
-      ? TInjectedProps
-      : never
-    : TInjectedProps
-  : never;
+export type ConnectedProps<TConnector> =
+  TConnector extends InferableComponentWithProps<infer TInjectedProps, any>
+    ? unknown extends TInjectedProps
+      ? TConnector extends InferableComponentWithProps<infer TInjectedProps>
+        ? TInjectedProps
+        : never
+      : TInjectedProps
+    : never;

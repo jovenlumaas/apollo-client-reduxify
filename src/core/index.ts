@@ -1,4 +1,6 @@
 export * from "./createReactiveVar";
 export * from "./mergeReactiveVars";
 export * from "./createStore";
-export * from "./components";
+export { applyMiddleware } from "./middleware";
+
+export type { ConnectedProps, IReactiveVarConnectorFn } from "./components";

@@ -26,7 +26,7 @@
     "react"
   ],
   "author": "JOL",
-  "license": "ISC",
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/jovenlumaas/apollo-client-reduxify/issues"
   },

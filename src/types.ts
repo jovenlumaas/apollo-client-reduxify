@@ -16,7 +16,7 @@ type TFieldType<S = any> = {
   read: (state: S, options: FieldFunctionOptions) => S;
 };
 
-type TSelectors<L extends TLegacySelectorMap> = {
+export type TSelectors<L extends TLegacySelectorMap> = {
   [P in keyof L]: Parameters<L[P]>[1] extends infer A
     ? A extends never | undefined
       ? () => ReturnType<L[P]>
@@ -55,6 +55,48 @@ export type TMergedReactiveVars<
   reducers: UnionToIntersection<T[K]["reducers"]>;
   selectors: UnionToIntersection<T[K]["selectors"]>;
   nonHookSelectors: UnionToIntersection<T[K]["nonHookSelectors"]>;
+};
+
+export type TGetStateFn<T extends Record<string, any>> = <K extends keyof T>(
+  selector: K,
+  ...args: Parameters<T[K]>
+) => ReturnType<T[K]>;
+
+export type TDispatchFn<T extends Record<string, any>> = <A extends keyof T>(
+  type: A,
+  ...args: Parameters<T[A]>
+) => void;
+
+export type TInternalDispatchFn = (excludeKeys: string[]) => TDispatchFn<any>;
+
+export type TMiddlewareFn<
+  M extends TMergedReactiveVars<any, any>,
+  RV = M["reactiveVars"],
+  R = M["reducers"],
+  A extends keyof R = keyof R
+> = (options: {
+  reactiveVars: RV;
+  dispatch: TDispatchFn<R>;
+}) => (action: { type: A; payload: any }, next: () => void) => void;
+
+export type TAllReducers = Record<
+  string,
+  {
+    type: string;
+    reducer: (dispatch: TInternalDispatchFn) => (payload: any) => void;
+  }
+>;
+
+export type TGenMiddlewareOptions = {
+  reactiveVars: TReactiveVarsMap;
+  middleware: TMiddlewareFn<any>[];
+  dispatch: TInternalDispatchFn;
+};
+
+export type TRunMiddlewareOptions = TGenMiddlewareOptions & {
+  caseReducer: (payload: any) => void;
+  type: string;
+  payload: any;
 };
 
 export type TPersistTo = "sessionStorage";

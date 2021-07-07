@@ -4,6 +4,12 @@ type TMergeReactiveVarsFn = <T extends TReactiveOptionsMap, K extends keyof T>(
   allInstances: T
 ) => TMergedReactiveVars<T, K>;
 
+/**
+ * A utility function used for combining all reactive varaible instances
+ *
+ * @param allInstances an object of the created reactive variable state and metadata.
+ * @returns merged instances and metadata.
+ */
 export const mergeReactiveVars: TMergeReactiveVarsFn = (allInstances) => {
   return Object.keys(allInstances).reduce(
     (acc, key) => {
