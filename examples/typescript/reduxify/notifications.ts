@@ -5,7 +5,6 @@ interface INotification {
   message: string;
 }
 
-// for './notifications.js'
 const initialState: INotification = {
   isOpen: false,
   message: '',

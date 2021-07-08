@@ -19,7 +19,7 @@ export const modalsVar = createReactiveVar({
     // you can access other reactive variable state or even dispatch an action via 'context' argument.
     // 'context' includes default API such as 'dispatch','reactiveVars', and 'nonHookSelectors'.
     // the developer can add metadata to this context during 'store' creation under context option
-    setModalShow: (state, payload, context) => {
+    setModalShow: (state, payload: string, context) => {
       const { reactiveVars, logger } = context;
       const notificationsState = reactiveVars.notificationsVar();
 
